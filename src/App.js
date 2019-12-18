@@ -1,44 +1,12 @@
 import React, { useCallback, useState } from 'react';
+
+import Tree from './Tree';
+import Resolved from './Resolved';
 import './App.css';
-
-function Node(props) {
-    const { data, name = '' } = props;
-
-    const isSimpleNode = typeof data === 'string';
-
-    const [isExpanded, setExpanded] = useState(true);
-
-    if (!data || (!isSimpleNode && !data.name)) return;
-
-    const { dependencies } = data;
-
-    if (isSimpleNode) {
-        return (
-            <div className="endNode">
-                {name} @{data}
-            </div>
-        );
-    }
-
-    return (
-        <div className="nodeWrapper">
-            <div className="parentNode" onClick={() => setExpanded(!isExpanded)}>
-                {data.name} @{data.version} <span className="arrow">{isExpanded ? <>&#9650;</> : <>&#9660;</>}</span>
-            </div>
-
-            {isExpanded && (
-                <div className="children">
-                    {Object.keys(dependencies).map((key, i) => (
-                        <Node data={dependencies[key]} name={key} key={key + i} />
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-}
 
 function App() {
     const [data, setData] = useState();
+    const [showTree, setShowTree] = useState(true);
 
     const handleFile = useCallback(fileChangeEvent => {
         if (fileChangeEvent.target.files[0]) {
@@ -56,12 +24,19 @@ function App() {
     return (
         <div className="app">
             <input type="file" onChange={handleFile} />
+            {data && (
+                <>
+                    <div className="switchView" onClick={() => setShowTree(!showTree)}>
+                        {showTree ? 'Show resolved' : 'Show tree'}
+                    </div>
 
-            {data && <Node data={data} />}
+                    {showTree && <Tree data={data} />}
+
+                    {!showTree && <Resolved data={data} />}
+                </>
+            )}
         </div>
     );
 }
 
 export default App;
-
-// Donw &#9660; Up 	&#9650;

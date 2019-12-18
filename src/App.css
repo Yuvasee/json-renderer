@@ -24,3 +24,15 @@ input {
 	font-size: 0.8em;
 	margin-left: 0.3em;
 }
+
+.switchView {
+	text-decoration: underline;
+	margin-bottom: 1rem;
+	cursor: pointer;
+}
+
+.resolved {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
